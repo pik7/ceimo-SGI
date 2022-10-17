@@ -214,13 +214,6 @@ public class MembreServiceImpl implements MembreService{
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
 
 	
 	
@@ -238,82 +231,5 @@ public class MembreServiceImpl implements MembreService{
 	
 	
 	
-	
-	
-	/*
-	 * public Membre getMembreByNom(String nomMembre) { Membre membre =
-	 * membreRepository.findByNomMembre(nomMembre);
-	 * membre.getMesRoles().forEach(role ->{ role.getDateadhesion(); });
-	 * 
-	 * 
-	 * 
-	 * 
-	 * return membre; }
-	 * 
-	 * // Liste des services offert pour les membres
-	 * 
-	 * public Iterable<Membre> findMembres(String motCle) { return
-	 * membreRepository.searchMembre(motCle, motCle); }
-	 * 
-	 * 
-	 * 
-	 * public Membre saveMembre(Membre membre) { if(membre.getIdMembre()==null) {
-	 * if(membreRepository.findByNomMembreAndPrenomMembreAndDateNaissance(membre.
-	 * getNomMembre(), membre.getPrenomMembre(), membre.getDateNaissance()) == null)
-	 * return membreRepository.save(membre); else throw new
-	 * RuntimeException("Membre déja présent dans le système !"); }else { return
-	 * membreRepository.save(membre); }
-	 * 
-	 * }
-	 * 
-	 * 
-	 * 
-	 * public Responsabilite saveResponsability(Responsabilite responsabilite) {
-	 * if(responsabilite.getIdresponsabilite()==null) {
-	 * if(responsabiliteRepository.findByPoste(responsabilite.getPoste()) == null)
-	 * return responsabiliteRepository.save(responsabilite); else throw new
-	 * RuntimeException("Poste déja présent dans le système !"); }else { return
-	 * responsabiliteRepository.save(responsabilite); } }
-	 * 
-	 * 
-	 * 
-	 * public Elire addMembreResponsability(Elire elire) {
-	 * 
-	 * return elireRepository.save(elire); }
-	 * 
-	 * public Demission demissioner(Demission demission) {
-	 * if(!demission.getDemissionnaire().isDemissionnaire()) return
-	 * demissionRepository.save(demission); else throw new
-	 * RuntimeException("Membre déjà démissionnaire !"); }
-	 * 
-	 * public void deleteMembre(Long id) {
-	 * 
-	 * membreRepository.deleteById(id); }
-	 * 
-	 * public void deleteResponsability(Poste poste) {
-	 * responsabiliteRepository.deleteByPoste(poste); }
-	 * 
-	 * public void deleteDemission(Long id) { demissionRepository.deleteById(id); }
-	 * 
-	 * public void removeMembreResponsability(Elire elire) {
-	 * 
-	 * elireRepository.deleteById(elire.getId()); }
-	 * 
-	 * public Iterable<Membre> getAllMembres() { Iterable<Membre> membres =
-	 * membreRepository.findAll(); membres.forEach(membre->{
-	 * membre.getMesRoles().forEach(role ->{ role.getResponsabilite().getPoste();
-	 * }); }); return membres; }
-	 * 
-	 * public Iterable<Elire> getResponsabilityMembre() { List<Elire> elires =
-	 * elireRepository.findAll(); elires.forEach(elire->{
-	 * elire.getResponsabilite().getPoste(); elire.getMembre().getNomMembre(); });
-	 * return elires; }
-	 * 
-	 * public List<Membre> getMembreDemissionnaire() { List<Membre> membres = new
-	 * ArrayList<>(); List<Demission> demissionnaires =
-	 * demissionRepository.findAll(); demissionnaires.forEach(demission ->{
-	 * demission.getDemissionnaire().getIdMembre();
-	 * membres.add(demission.getDemissionnaire()); }); return membres; }
-	 */
 
 }
