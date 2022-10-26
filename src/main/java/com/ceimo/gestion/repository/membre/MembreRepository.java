@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.TemporalType;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Temporal;
@@ -31,6 +33,8 @@ public interface MembreRepository extends JpaRepository<Membre, Long>{
 	
 	
 	Membre findByLogin(String login);
+	
+	Page<Membre> findAll(Pageable pageable);
 	
 	
 	

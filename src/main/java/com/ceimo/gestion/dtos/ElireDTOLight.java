@@ -1,18 +1,20 @@
 package com.ceimo.gestion.dtos;
 
+import java.util.Date;
 
 import com.ceimo.gestion.entity.membre.Poste;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResponsabiliteDTO {
+public class ElireDTOLight {
 
-	private Long idresponsabilite;
+	private Long idMembre;
+	private Long idExercice;
 	private String poste;
-	private int dureemandat; 
+	private Date dateNomination;
+	private int montantIbscription;
 }

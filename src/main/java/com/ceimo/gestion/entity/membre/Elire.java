@@ -24,8 +24,6 @@ public class Elire {
 	@Column(name = "DATE_ADHESION")
 	@Temporal(TemporalType.DATE)
 	private Date dateadhesion;
-	@Column(name = "MONTANT_INSCRIPTION", nullable = true)
-	private int montantinscription;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_MEMBRE", nullable = false)
@@ -41,8 +39,7 @@ public class Elire {
 	
 	@Override
 	public String toString() {
-		return "Elire [id=" + id + ", dateadhesion=" + dateadhesion + ", montantinscription=" + montantinscription
-				+ "]";
+		return "Elire [id=" +  "]";
 	}
 	
 	

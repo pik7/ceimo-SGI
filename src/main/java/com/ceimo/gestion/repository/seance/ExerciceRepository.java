@@ -9,4 +9,5 @@ import com.ceimo.gestion.entity.tontine.Tontine;
 @Repository
 public interface ExerciceRepository extends JpaRepository<Exercice, Long> {
 
+	Exercice findByStatut(boolean etat);
 }

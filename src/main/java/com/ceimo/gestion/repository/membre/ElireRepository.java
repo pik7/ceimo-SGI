@@ -10,7 +10,7 @@ import com.ceimo.gestion.entity.tontine.Tontine;
 @Repository
 public interface ElireRepository extends JpaRepository<Elire, Long> {
 	
-	Elire findByExerciceIdExerciceAndResponsabilitePoste(Long IdExercice, Poste poste);
+	Elire findByExerciceIdExerciceAndResponsabilitePoste(Long IdExercice, String poste);
 	void deleteByResponsabiliteIdresponsabilite(Long idResp);
 	void deleteByResponsabiliteIdresponsabiliteAndMembreIdMembreAndExerciceIdExercice(Long idResp, Long idMembre, Long IdExercice);
 }

@@ -33,8 +33,7 @@ public class Responsabilite {
 	@Column(name = "ID_RESPONSABILITE")
 	private Long idresponsabilite;
 	@Column(name="INTITULE_RESPONSABILITE", nullable = false, unique = true)
-	@Enumerated(EnumType.STRING)
-	private Poste poste;
+	private String poste;
 	@Column(name="DUREE_MANDAT")
 	private int dureemandat; 
 	

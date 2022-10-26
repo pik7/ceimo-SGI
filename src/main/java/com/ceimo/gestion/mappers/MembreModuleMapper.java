@@ -10,11 +10,13 @@ import org.springframework.stereotype.Service;
 import com.ceimo.gestion.dtos.DemissionDTO;
 import com.ceimo.gestion.dtos.ElireDTO;
 import com.ceimo.gestion.dtos.ExerciceDTO;
+import com.ceimo.gestion.dtos.InscriptionDTO;
 import com.ceimo.gestion.dtos.MembreBureauDTO;
 import com.ceimo.gestion.dtos.MembreSimplifieDTO;
 import com.ceimo.gestion.dtos.ResponsabiliteDTO;
 import com.ceimo.gestion.entity.membre.Demission;
 import com.ceimo.gestion.entity.membre.Elire;
+import com.ceimo.gestion.entity.membre.Inscription;
 import com.ceimo.gestion.entity.membre.Membre;
 import com.ceimo.gestion.entity.membre.Responsabilite;
 import com.ceimo.gestion.entity.seance.Exercice;
@@ -122,6 +124,22 @@ public class MembreModuleMapper {
 		List<ResponsabiliteDTO> responsabiliteDTOs = responsabilites.stream().map(resp ->fromResponsabilite(resp)).collect(Collectors.toList());
 		membreBureauDTO.setPostes(responsabiliteDTOs);
 		return membreBureauDTO;
+	}
+	
+	public InscriptionDTO fromInscription(Inscription inscription) {
+		InscriptionDTO inscriptionDTO = new InscriptionDTO();
+		BeanUtils.copyProperties(inscription, inscriptionDTO);
+		inscriptionDTO.setMembre(fromMembre(inscription.getMembre()));	
+		inscriptionDTO.setExercice(fromExercice(inscription.getExercice()));
+		return inscriptionDTO;
+	}
+	
+	public Inscription fromInscriptionDTO(InscriptionDTO inscriptionDTO) {
+		Inscription inscription = new Inscription();
+		BeanUtils.copyProperties(inscriptionDTO, inscription);
+		inscription.setMembre(fromMembreSimplifieDTO(inscriptionDTO.getMembre()));	
+		inscription.setExercice(fromExerciceDTO(inscriptionDTO.getExercice()));
+		return inscription;
 	}
 	
 	

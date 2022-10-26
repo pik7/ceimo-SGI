@@ -10,5 +10,5 @@ import com.ceimo.gestion.entity.membre.Responsabilite;
 
 @Repository
 public interface ResponsabiliteRepository extends JpaRepository<Responsabilite, Long> {
-	Responsabilite findByPoste(Poste poste);
+	Responsabilite findByPoste(String poste);
 }

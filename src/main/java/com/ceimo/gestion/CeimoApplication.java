@@ -66,7 +66,7 @@ public class CeimoApplication implements CommandLineRunner {
 		membreService.saveMembre(membreSimplifieDTO);*/
 		
 		//membreService.nommerMembre(3L, 1L, Poste.TRESORIER, new Date(), 0);
-		membreService.exclureDuBureau(3L, 1L);
+		membreService.exclureDuBureau(3L);
 		
 	}
 	

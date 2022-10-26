@@ -43,7 +43,7 @@ public class Exercice {
 	@Column(name="DATE_FIN_EXERCICE", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dateFinExercice;
-	
+	private boolean statut;
 	@OneToMany(mappedBy = "exercice", fetch = FetchType.LAZY)
 	//@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Set<Seance> seances = new HashSet<>();
