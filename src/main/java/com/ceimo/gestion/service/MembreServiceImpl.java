@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import com.ceimo.gestion.dtos.MembreBureauDTO;
 import com.ceimo.gestion.dtos.MembrePagineDTO;
 import com.ceimo.gestion.dtos.MembreSimplifieDTO;
 import com.ceimo.gestion.dtos.ResponsabiliteDTO;
+import com.ceimo.gestion.entity.compte.enums.StatutCompte;
 import com.ceimo.gestion.entity.membre.Demission;
 import com.ceimo.gestion.entity.membre.Elire;
 import com.ceimo.gestion.entity.membre.Inscription;
@@ -60,6 +62,8 @@ public class MembreServiceImpl implements MembreService {
 	private ExerciceRepository exerciceRepository;
 	private InscriptionRepository inscriptionRepository;
 	private MembreModuleMapper meMapper;
+	private CompteService compteService;
+	private Environment environment;
 
 	public List<MembreSimplifieDTO> listMembres() {
 		List<Membre> membres = membreRepository.findAll();
@@ -72,6 +76,9 @@ public class MembreServiceImpl implements MembreService {
 	@Override
 	public MembrePagineDTO getAllMembrePagine(int page, int size) {
 		Page<Membre> membres = membreRepository.findAll(PageRequest.of(page, size));
+		
+		
+		
 		MembrePagineDTO membrePagineDTO = new MembrePagineDTO();
 		membrePagineDTO.setCurrentPage(page);
 		membrePagineDTO.setPageSize(size);
@@ -82,9 +89,6 @@ public class MembreServiceImpl implements MembreService {
 		return membrePagineDTO;
 	}
 	
-	
-	
-
 	public MembreSimplifieDTO getMembreById(Long idMembre) throws MembreNotFoundException {
 		Membre membre = membreRepository.findById(idMembre)
 				.orElseThrow(() -> new MembreNotFoundException("Membre non trouvé"));
@@ -127,13 +131,19 @@ public class MembreServiceImpl implements MembreService {
 	}
 
 	@Override
-	public MembreSimplifieDTO saveMembre(MembreSimplifieDTO membreDTO) throws MembreDejeExistantException {
+	public MembreSimplifieDTO saveMembre(MembreSimplifieDTO membreDTO) throws MembreDejeExistantException, MembreNotFoundException {
 		Membre membre = meMapper.fromMembreSimplifieDTO(membreDTO);
+		membre.setNomMembre(membre.getNomMembre().toUpperCase());
+		if(membre.getPrenomMembre() != null) {
+			membre.setPrenomMembre(membre.getPrenomMembre().toUpperCase());
+		}
 		if (membreDTO.getIdMembre() == null) {
 			Membre membreTest = membreRepository.findByNomMembreAndPrenomMembreAndDateNaissanceOrLogin(
 					membre.getNomMembre(), membre.getPrenomMembre(), membre.getDateNaissance(), membre.getLogin());
 			if (membreTest == null) {
-				return meMapper.fromMembre(membreRepository.save(membre));
+				membre = membreRepository.save(membre);
+				compteService.createComptesByMembre(membre.getIdMembre());
+				return meMapper.fromMembre(membre);
 			} else {
 				throw new MembreDejeExistantException("Le membre ou login deja existant");
 			}
@@ -142,6 +152,7 @@ public class MembreServiceImpl implements MembreService {
 		}
 
 	}
+	
 
 	@Override
 	public ResponsabiliteDTO saveResponsabilite(ResponsabiliteDTO responsabiliteDTO)

@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity 
-
 @NoArgsConstructor @DynamicUpdate
+@Data
 public class Operation {
 
 	

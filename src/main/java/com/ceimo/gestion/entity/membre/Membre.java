@@ -53,6 +53,8 @@ public class Membre {
 	@Column(name = "DATE_NAISSANCE", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dateNaissance;
+	@Column(name = "EMAIL", nullable = false)
+	private String email;
 	@Column(name = "DATE_FIRST_INSCRIPTION", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dateFirstInscription;

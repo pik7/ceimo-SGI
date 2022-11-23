@@ -23,6 +23,7 @@ public interface MembreRepository extends JpaRepository<Membre, Long>{
 	
 	Membre findByDemissionnaire(boolean d);
 	Membre findByNomMembre(String nom);
+	List<Membre> findByDemissionnaireOrderByNomMembre(boolean d);
 	
 	@Query( "SELECT m FROM Membre m WHERE m.nomMembre LIKE ?1 or m.prenomMembre LIKE ?2 ORDER BY m.nomMembre")
 	List<Membre> searchMembre(String motCle, String motCle2);

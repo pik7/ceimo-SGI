@@ -27,6 +27,7 @@ public class MembreSimplifieDTO {
 	private String prenomMembre;
 	private char sexeMembre;
 	private Date dateNaissance;
+	private String email;
 	private Date dateFirstInscription;
 	private String photo;
 	@Enumerated(EnumType.STRING)

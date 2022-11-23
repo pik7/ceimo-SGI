@@ -42,6 +42,7 @@ public class Tontine {
 	private Date dateFin;
 	@Column(name = "ETAT",nullable = false)
 	private boolean etat;
+	private int montantTontine;
 
 	@Override
 	public String toString() {

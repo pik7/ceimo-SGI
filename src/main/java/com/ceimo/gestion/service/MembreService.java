@@ -38,7 +38,7 @@ public interface MembreService {
 	public List<DemissionDTO> getDemissionnaire();
 	
 	public MembreSimplifieDTO saveMembre(MembreSimplifieDTO membreDTO) 
-			throws MembreDejeExistantException;
+			throws MembreDejeExistantException, MembreNotFoundException;
 	
 	public ResponsabiliteDTO saveResponsabilite(ResponsabiliteDTO responsabiliteDTO) 
 			throws ResponsabiliteDejeExistantException;

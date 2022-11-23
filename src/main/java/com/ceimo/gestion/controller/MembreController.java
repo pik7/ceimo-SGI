@@ -70,7 +70,7 @@ public class MembreController {
 	}
 	
 	@PostMapping("/membres")
-	public MembreSimplifieDTO saveMembre(@RequestBody MembreSimplifieDTO membreSimplifieDTO) throws MembreDejeExistantException {
+	public MembreSimplifieDTO saveMembre(@RequestBody MembreSimplifieDTO membreSimplifieDTO) throws MembreDejeExistantException, MembreNotFoundException {
 		return membreService.saveMembre(membreSimplifieDTO);
 	}
 	
@@ -110,7 +110,7 @@ public class MembreController {
 	}
 	
 	@PutMapping("/membres/{id}")
-	public MembreSimplifieDTO updateMembre(@PathVariable("id") Long idMembre, @RequestBody MembreSimplifieDTO membreSimplifieDTO) throws MembreDejeExistantException {
+	public MembreSimplifieDTO updateMembre(@PathVariable("id") Long idMembre, @RequestBody MembreSimplifieDTO membreSimplifieDTO) throws MembreDejeExistantException, MembreNotFoundException {
 		membreSimplifieDTO.setIdMembre(idMembre);
 		return membreService.saveMembre(membreSimplifieDTO);
 	}
