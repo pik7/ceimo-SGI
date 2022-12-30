@@ -30,8 +30,18 @@ public class Inscrire {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idInscription;
 	
-	@Column(name="MOIS_GAIN", length = 10)
+	private double montant;
+	
+	@Column(name="MOIS_GAIN", length = 10, nullable = true)
 	private String mois;
+	private double gain;
+	
+	@Column(name = "classer", nullable = false)
+	private boolean classer;
+	
+	private int nombreEchec;
+	
+	private int ordre;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_MEMBRE")

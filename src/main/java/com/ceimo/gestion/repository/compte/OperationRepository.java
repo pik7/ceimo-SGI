@@ -9,7 +9,7 @@ import com.ceimo.gestion.entity.compte.Operation;
 import com.ceimo.gestion.entity.tontine.Tontine;
 
 @Repository
-public interface OperationRepository extends JpaRepository<Operation, Long> {
+public interface OperationRepository extends JpaRepository<Operation, String> {
 
 	Page<Operation> findByCompteIdCompteOrderByDateOperationDesc(Long idCompte, Pageable pageable);
 }

@@ -1,7 +1,9 @@
 package com.ceimo.gestion.entity.seance;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -48,11 +50,13 @@ public class Seance {
 	private Date dateSeance;
 	@Column(name = "ORDRE_DU_JOUR",nullable = false)
 	private String ordreDuJour;
-	@Column(name = "COMPTE_RENDU", length = 2000)
+	@Column(name = "COMPTE_RENDU", length = 2000, nullable = true)
 	private String compteRendu;
 	@Column(name = "TYPE_SEANCE", length = 50)
 	@Enumerated(EnumType.STRING)
 	private TypeSeance typeSeance;
+	@Enumerated(EnumType.STRING)
+	private StatutSeance statutSeance;
 	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -64,11 +68,18 @@ public class Seance {
 			joinColumns = @JoinColumn(name = "ID_SEANCE"), // champ de la table de jointure
 			inverseJoinColumns = @JoinColumn(name = "ID_MEMBRE")// champ de la table de jointure
 	)
-	private Set<Membre> listesdespresents = new HashSet<>();
+	private List<Membre> listesdespresents = new ArrayList<>();
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_EXERCICE", nullable = false)
 	private Exercice exercice;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "ACCUEILLANTS", // Nom de la table de jointure
+			joinColumns = @JoinColumn(name = "ID_SEANCE"), // champ de la table de jointure
+			inverseJoinColumns = @JoinColumn(name = "ID_MEMBRE")// champ de la table de jointure
+	)
+	private List<Membre> accueillants = new ArrayList<>();
 	
 
 	@Override

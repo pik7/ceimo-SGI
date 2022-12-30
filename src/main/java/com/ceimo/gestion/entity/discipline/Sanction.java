@@ -38,16 +38,5 @@ public class Sanction {
 	@Column(name = "AMENDE")
 	private int amende;
 	
-	/*
-	 * @OneToMany(mappedBy = "pk.casdiscipline") private Set<Constat> lesConstats =
-	 * new HashSet<>();
-	 * 
-	 * @Override public String toString() { return "CasDiscipline [idCasDiscipline="
-	 * + idCasDiscipline + ", libelleCasDiscipline=" + libelleCasDiscipline +
-	 * ", amende=" + amende + ", lesConstats=" + lesConstats + "]"; }
-	 */
-	
-	
-	
 	
 }

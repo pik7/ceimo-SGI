@@ -31,13 +31,14 @@ import com.ceimo.gestion.entity.compte.enums.StatutCompte;
 import com.ceimo.gestion.entity.compte.enums.TypeOperation;
 import com.ceimo.gestion.entity.membre.Membre;
 import com.ceimo.gestion.entity.seance.Seance;
-import com.ceimo.gestion.mappers.MembreModuleMapper;
+import com.ceimo.gestion.mappers.MapperModule;
 import com.ceimo.gestion.repository.compte.CompteRepository;
 import com.ceimo.gestion.repository.compte.OperationRepository;
 import com.ceimo.gestion.repository.membre.MembreRepository;
 import com.ceimo.gestion.repository.seance.SeanceRepository;
 import com.ceimo.gestion.service.exceptions.CompteNotFoundException;
 import com.ceimo.gestion.service.exceptions.MembreNotFoundException;
+import com.ceimo.gestion.service.exceptions.OperationNotFoundException;
 import com.ceimo.gestion.service.exceptions.SeanceNotFoundException;
 import com.ceimo.gestion.service.exceptions.SoldeInsuffisantException;
 
@@ -45,14 +46,15 @@ import lombok.AllArgsConstructor;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@AllArgsConstructor 
 public class CompteServiceImpl implements CompteService {
 	
 	private CompteRepository compteRepository;
 	private MembreRepository membreRepository;
 	private OperationRepository operationRepository;
 	private SeanceRepository seanceRepository;
-	private MembreModuleMapper meMapper;
+	private MapperModule meMapper;
+	private CustomsProperties props; 
 	
 	
 	@Override
@@ -319,10 +321,30 @@ public class CompteServiceImpl implements CompteService {
 	public void createComptesByMembre(Long idMembre) throws MembreNotFoundException {
 		Membre membre = membreRepository.findById(idMembre)
 				.orElseThrow(() ->new MembreNotFoundException("Membre non existant"));
-		saveCompteEpargne(0, 11.5, membre.getIdMembre(),StatutCompte.ACTIF);
-		saveCompteFond(0,	20000,membre.getIdMembre(),StatutCompte.ACTIF);
-		saveCompteRoulement(0,1000,membre.getIdMembre(),StatutCompte.ACTIF);
-		saveCompteCollation(0, 2000,membre.getIdMembre(),StatutCompte.ACTIF);
+		saveCompteEpargne(0, Double.parseDouble(props.getTauxInteret()), membre.getIdMembre(),StatutCompte.ACTIF);
+		saveCompteFond(0,	Double.parseDouble(props.getSoldeMaxFond()),membre.getIdMembre(),StatutCompte.ACTIF);
+		saveCompteRoulement(0,Double.parseDouble(props.getMontantMinRoulement()),membre.getIdMembre(),StatutCompte.ACTIF);
+		saveCompteCollation(0, Double.parseDouble(props.getMontantCollation()),membre.getIdMembre(),StatutCompte.ACTIF);
+	}
+
+	@Override
+	public void deleteCompte(Long idCompte) throws CompteNotFoundException {
+		Compte compte = compteRepository.findById(idCompte).orElseThrow(()-> new CompteNotFoundException("Compte non existant"));
+		compteRepository.delete(compte);
+	}
+
+	@Override
+	public void avoidOperation(String idOperation) throws OperationNotFoundException, CompteNotFoundException {
+		Operation operation = operationRepository.findById(idOperation)
+				.orElseThrow(()-> new OperationNotFoundException("Operation non existante"));
+		Compte compte = compteRepository.findById(operation.getCompte().getIdCompte()).orElseThrow(()-> new CompteNotFoundException("Compte non existant"));
+		if(operation.getType() == TypeOperation.DEBIT) {
+			compte.setSolde(compte.getSolde()+operation.getMontant());
+			
+		}else {
+			compte.setSolde(compte.getSolde()-operation.getMontant());
+		}
+		operationRepository.delete(operation);
 	}
 	
 	

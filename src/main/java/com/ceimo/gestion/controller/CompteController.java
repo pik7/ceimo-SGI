@@ -3,6 +3,7 @@ package com.ceimo.gestion.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,7 @@ import com.ceimo.gestion.service.CompteService;
 import com.ceimo.gestion.service.exceptions.CompteDejaCreeException;
 import com.ceimo.gestion.service.exceptions.CompteNotFoundException;
 import com.ceimo.gestion.service.exceptions.MembreNotFoundException;
+import com.ceimo.gestion.service.exceptions.OperationNotFoundException;
 import com.ceimo.gestion.service.exceptions.SeanceNotFoundException;
 import com.ceimo.gestion.service.exceptions.SoldeInsuffisantException;
 
@@ -173,6 +175,16 @@ public class CompteController {
 				operationCommuneDTO.getMontant(), 
 				operationCommuneDTO.getDescription(), 
 				new Collation(), "CREDIT");
+	}
+	
+	@DeleteMapping("/comptes{id}")
+	public void supprimerCompte(@PathVariable Long id) throws CompteNotFoundException {
+		compteService.deleteCompte(id);
+	}
+	
+	@PostMapping("/comptes/anuller/operation{id}")
+	public void annulerOperation(@PathVariable String id) throws OperationNotFoundException, CompteNotFoundException {
+		compteService.avoidOperation(id);
 	}
 	
 	

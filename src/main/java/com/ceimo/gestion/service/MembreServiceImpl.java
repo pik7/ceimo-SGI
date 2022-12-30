@@ -31,7 +31,7 @@ import com.ceimo.gestion.entity.membre.Membre;
 import com.ceimo.gestion.entity.membre.Poste;
 import com.ceimo.gestion.entity.membre.Responsabilite;
 import com.ceimo.gestion.entity.seance.Exercice;
-import com.ceimo.gestion.mappers.MembreModuleMapper;
+import com.ceimo.gestion.mappers.MapperModule;
 import com.ceimo.gestion.repository.membre.DemissionRepository;
 import com.ceimo.gestion.repository.membre.ElireRepository;
 import com.ceimo.gestion.repository.membre.InscriptionRepository;
@@ -61,7 +61,7 @@ public class MembreServiceImpl implements MembreService {
 	private ElireRepository elireRepository;
 	private ExerciceRepository exerciceRepository;
 	private InscriptionRepository inscriptionRepository;
-	private MembreModuleMapper meMapper;
+	private MapperModule meMapper;
 	private CompteService compteService;
 	private Environment environment;
 
@@ -273,7 +273,7 @@ public class MembreServiceImpl implements MembreService {
 				.orElseThrow(() -> new ExerciceNotFoundException("Exercice non trouvé dans le système"));
 
 		Inscription inscription = inscriptionRepository.findByMembreIdMembreAndExerciceIdExercice(idMembre, idExercice);
-		if (inscription != null) {
+		if (inscription == null) {
 			Inscription insc = new Inscription();
 			insc.setMontant(montant);
 			insc.setMembre(membre);

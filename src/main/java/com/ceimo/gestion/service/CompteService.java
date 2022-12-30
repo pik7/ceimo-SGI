@@ -13,6 +13,7 @@ import com.ceimo.gestion.entity.compte.Compte;
 import com.ceimo.gestion.entity.compte.enums.StatutCompte;
 import com.ceimo.gestion.service.exceptions.CompteNotFoundException;
 import com.ceimo.gestion.service.exceptions.MembreNotFoundException;
+import com.ceimo.gestion.service.exceptions.OperationNotFoundException;
 import com.ceimo.gestion.service.exceptions.SeanceNotFoundException;
 import com.ceimo.gestion.service.exceptions.SoldeInsuffisantException;
 
@@ -54,4 +55,7 @@ public interface CompteService {
 	
 	public void transactionTousLesComptesMemeType(Long idSeance, double montant, String description, Compte compte, String typeOperation) throws CompteNotFoundException, SeanceNotFoundException;
 	public void createComptesByMembre(Long idMembre) throws MembreNotFoundException;
+	
+	public void deleteCompte(Long idCompte) throws CompteNotFoundException;
+	public void avoidOperation(String idOperation) throws OperationNotFoundException, CompteNotFoundException;
 }

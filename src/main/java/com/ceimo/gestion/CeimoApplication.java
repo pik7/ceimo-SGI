@@ -1,6 +1,8 @@
 package com.ceimo.gestion;
 
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +31,7 @@ import com.ceimo.gestion.repository.seance.ExerciceRepository;
 import com.ceimo.gestion.service.EmpruntServiceImpl;
 import com.ceimo.gestion.service.MembreService;
 import com.ceimo.gestion.service.MembreServiceImpl;
+import com.ceimo.gestion.service.TontineService;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 
@@ -37,6 +40,8 @@ public class CeimoApplication implements CommandLineRunner {
 	
 	@Autowired
 	private MembreService membreService;
+	@Autowired
+	private TontineService tontineService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CeimoApplication.class, args);
@@ -44,30 +49,8 @@ public class CeimoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		/*List<MembreBureauDTO> membreBureauDTOS =  membreService.listMembresBureau(1L);
-		membreBureauDTOS.forEach(membrebureauDTO ->{
-			System.out.println(membrebureauDTO.getNomMembre());
-			System.out.println(membrebureauDTO.getPrenomMembre());
-			membrebureauDTO.getPostes().forEach(poste ->{
-				System.out.println(poste.getPoste());
-			});
-		});
-		
-		MembreSimplifieDTO membreSimplifieDTO = new MembreSimplifieDTO();
-		membreSimplifieDTO.setNomMembre("NGOMNGUE");
-		membreSimplifieDTO.setPrenomMembre("SERGE ALBERT");
-		membreSimplifieDTO.setDateFirstInscription(new Date());
-		membreSimplifieDTO.setDateNaissance(new Date());
-		membreSimplifieDTO.setDemissionnaire(false);
-		membreSimplifieDTO.setLogin("man");
-		membreSimplifieDTO.setPassword("1234");
-		membreSimplifieDTO.setSexeMembre('M');
-		membreSimplifieDTO.setStatutGeo(StatutGeo.RESIDENT);
-		membreService.saveMembre(membreSimplifieDTO);*/
-		
-		//membreService.nommerMembre(3L, 1L, Poste.TRESORIER, new Date(), 0);
-		membreService.exclureDuBureau(3L);
-		
+		//tontineService.reclasserApresEchec(1L, 7L);
+		//tontineService.classement(1L);
 	}
 	
 	//bean de configuration pour que les propriétés des proxy hibernate soit null

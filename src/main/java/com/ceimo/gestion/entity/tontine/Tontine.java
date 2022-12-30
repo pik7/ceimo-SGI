@@ -1,9 +1,12 @@
 package com.ceimo.gestion.entity.tontine;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,8 +45,13 @@ public class Tontine {
 	private Date dateFin;
 	@Column(name = "ETAT",nullable = false)
 	private boolean etat;
-	private int montantTontine;
+	@Column(name = "montant_en_caisse",nullable = false)
+	private double montantEnCaisse;
+	
+	@OneToMany(mappedBy = "tontine", cascade = CascadeType.REMOVE)
+	private List<Contribution> contributions = new ArrayList<>();
 
+	
 	@Override
 	public String toString() {
 		return "Tontine [idTontine=" + idTontine + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin

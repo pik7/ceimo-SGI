@@ -9,4 +9,5 @@ import com.ceimo.gestion.entity.tontine.Tontine;
 @Repository
 public interface SanctionRepository extends JpaRepository<Sanction, Long> {
 
+	Sanction findByLibelleSanction(String libelle);
 }

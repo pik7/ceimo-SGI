@@ -31,9 +31,9 @@ public class Operation {
 	private TypeOperation type;
 	private String description;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Compte compte;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Seance seance;
 }

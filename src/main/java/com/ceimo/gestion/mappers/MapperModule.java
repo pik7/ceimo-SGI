@@ -1,40 +1,80 @@
 package com.ceimo.gestion.mappers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ceimo.gestion.dtos.CompteCollationDTO;
 import com.ceimo.gestion.dtos.CompteEpargneDTO;
 import com.ceimo.gestion.dtos.CompteFondDTO;
 import com.ceimo.gestion.dtos.CompteRoulementDTO;
+import com.ceimo.gestion.dtos.ConstatDTO;
+import com.ceimo.gestion.dtos.ConstatFullDTO;
+import com.ceimo.gestion.dtos.ContributionDTO;
+import com.ceimo.gestion.dtos.ContributionFullDTO;
 import com.ceimo.gestion.dtos.DemissionDTO;
 import com.ceimo.gestion.dtos.ElireDTO;
+import com.ceimo.gestion.dtos.EmpruntDTO;
 import com.ceimo.gestion.dtos.ExerciceDTO;
 import com.ceimo.gestion.dtos.InscriptionDTO;
+import com.ceimo.gestion.dtos.InscrireDTO;
 import com.ceimo.gestion.dtos.MembreBureauDTO;
 import com.ceimo.gestion.dtos.MembreSimplifieDTO;
 import com.ceimo.gestion.dtos.OperationDTO;
 import com.ceimo.gestion.dtos.ResponsabiliteDTO;
+import com.ceimo.gestion.dtos.SanctionDTO;
+import com.ceimo.gestion.dtos.SeanceFullDTO;
+import com.ceimo.gestion.dtos.SeanceSimpleDTO;
+import com.ceimo.gestion.dtos.TontineDTO;
+import com.ceimo.gestion.dtos.VersementSanctionDTO;
 import com.ceimo.gestion.entity.compte.Collation;
 import com.ceimo.gestion.entity.compte.Epargne;
 import com.ceimo.gestion.entity.compte.Fond;
 import com.ceimo.gestion.entity.compte.Operation;
 import com.ceimo.gestion.entity.compte.Roulement;
+import com.ceimo.gestion.entity.discipline.Constat;
+import com.ceimo.gestion.entity.discipline.Sanction;
+import com.ceimo.gestion.entity.discipline.VersementSanction;
+import com.ceimo.gestion.entity.emprunt.Emprunt;
 import com.ceimo.gestion.entity.membre.Demission;
 import com.ceimo.gestion.entity.membre.Elire;
 import com.ceimo.gestion.entity.membre.Inscription;
 import com.ceimo.gestion.entity.membre.Membre;
 import com.ceimo.gestion.entity.membre.Responsabilite;
 import com.ceimo.gestion.entity.seance.Exercice;
+import com.ceimo.gestion.entity.seance.Seance;
+import com.ceimo.gestion.entity.tontine.Contribution;
+import com.ceimo.gestion.entity.tontine.Inscrire;
+import com.ceimo.gestion.entity.tontine.Tontine;
+import com.ceimo.gestion.repository.discipline.ConstatRepository;
+import com.ceimo.gestion.repository.discipline.SanctionRepository;
+import com.ceimo.gestion.repository.discipline.VersementSanctionRepository;
+import com.ceimo.gestion.repository.membre.MembreRepository;
+import com.ceimo.gestion.repository.seance.ExerciceRepository;
+import com.ceimo.gestion.repository.seance.SeanceRepository;
+
+import lombok.AllArgsConstructor;
 
 @Service
-public class MembreModuleMapper {
+@AllArgsConstructor
+@Transactional
+public class MapperModule {
 	
+	private MembreRepository membreRepository;
+	private ExerciceRepository exerciceRepository;
+	private ConstatRepository constatRepository; 
+	private SanctionRepository sanctionRepository;
+	private SeanceRepository seanceRepository;
+	private VersementSanctionRepository versementSanctionRepository;
 	
+
 	//****************** Mapping de Membre ***********************************
 	public MembreSimplifieDTO fromMembre(Membre membre) {
 
@@ -236,8 +276,170 @@ public class MembreModuleMapper {
 	}
 	
 	
+	public Tontine fromTontineDTO(TontineDTO tontineDTO) {
+		Tontine tontine = new Tontine();
+		BeanUtils.copyProperties(tontineDTO, tontine);
+		return tontine;
+	}
+	
+	public TontineDTO fromTontine(Tontine tontine) {
+		TontineDTO tontineDTO = new TontineDTO();
+		BeanUtils.copyProperties(tontine, tontineDTO);
+		return tontineDTO;
+	}
 	
 	
+	public ContributionDTO fromContribution(Contribution contribution) {
+		ContributionDTO contributionDTO = new ContributionDTO();
+		BeanUtils.copyProperties(contribution, contributionDTO);
+		contributionDTO.setIdMembre(contribution.getMembre().getIdMembre());
+		contributionDTO.setIdSeance(contribution.getSeance().getIdSeance());
+		contributionDTO.setIdTontine(contribution.getTontine().getIdTontine());
+		return contributionDTO;
+	}
 	
+	public ContributionFullDTO fromContributionFull(Contribution contribution) {
+		ContributionFullDTO contributionFullDTO = new ContributionFullDTO();
+		BeanUtils.copyProperties(contribution, contributionFullDTO);
+		contributionFullDTO.setMembre(fromMembre(contribution.getMembre()));
+		contributionFullDTO.setTontine(fromTontine(contribution.getTontine()));
+		contributionFullDTO.setIdSeance(contribution.getSeance().getIdSeance());
+		return contributionFullDTO;
+	}
+	
+	
+	public InscrireDTO fromInscrire(Inscrire inscrire) {
+		InscrireDTO inscrireDTO = new InscrireDTO();
+		BeanUtils.copyProperties(inscrire, inscrireDTO);
+		inscrireDTO.setMembre(fromMembre(inscrire.getMembre()));
+		inscrireDTO.setIdTontine(inscrire.getTontine().getIdTontine());
+		return inscrireDTO;
+	}
+	
+	
+	public Emprunt fromEmpruntDTO(EmpruntDTO empruntDTO) throws Exception { 
+		Emprunt emprunt = new Emprunt();
+		BeanUtils.copyProperties(empruntDTO, emprunt);
+		Membre membre = membreRepository.findById(empruntDTO.getIdEmprunteur()).orElseThrow(()-> new Exception(""));
+		emprunt.setEmprunteur(membre);
+		List<Membre> lesAvalistes = new ArrayList<Membre>();
+		for(Long idAval : empruntDTO.getIdAvalistes()) {
+			Membre unAvaliste = membreRepository.findById(idAval).orElseThrow(()-> new Exception(""));
+			lesAvalistes.add(unAvaliste);
+		}
+		emprunt.setAvalistes(lesAvalistes);
+		return emprunt;
+	}
+	
+	public SeanceSimpleDTO fromSeance(Seance seance) {
+		SeanceSimpleDTO seanceSimpleDTO = new SeanceSimpleDTO();
+		BeanUtils.copyProperties(seance, seanceSimpleDTO);
+		seanceSimpleDTO.setPresident(seance.getPresident().getIdMembre());
+		seanceSimpleDTO.setExercice(seance.getExercice().getIdExercice());
+		return seanceSimpleDTO;	
+	}
+	
+	public Seance fromSeanceSimpleDTO(SeanceSimpleDTO seanceDTO) throws Exception {
+		Seance seance = new Seance();
+		try{
+			BeanUtils.copyProperties(seanceDTO, seance);
+		}catch(BeansException be) {
+			throw new  Exception("Conversion de bean echouée");
+		}
+		
+		Membre president = membreRepository.findById(seanceDTO.getPresident()).orElseThrow(()-> new Exception("Membre non trouvé"));
+		Exercice exercice = exerciceRepository.findById(seanceDTO.getExercice()).orElseThrow(()-> new Exception("Exercice non trouvé"));
+		seance.setPresident(president);
+		seance.setExercice(exercice);
+		return seance;	
+	}
+	
+	public SeanceFullDTO fromFullSeance(Seance seance) {
+		SeanceFullDTO seanceFullDTO = new SeanceFullDTO();
+		BeanUtils.copyProperties(seance, seanceFullDTO);
+		seanceFullDTO.setPresident(fromMembre(seance.getPresident()));
+		seanceFullDTO.setExercice(fromExercice(seance.getExercice()));
+		seanceFullDTO.setListesdespresents(seance.getListesdespresents().stream()
+				.map(membre ->fromMembre(membre))
+				.collect(Collectors.toList())
+				);
+		seanceFullDTO.setAccueillants(seance.getAccueillants().stream()
+				.map(membre ->fromMembre(membre))
+				.collect(Collectors.toList())
+				);
+		return seanceFullDTO;	
+	}
+	
+	
+	public SanctionDTO fromSanction(Sanction sanction) {
+		SanctionDTO sanctionDTO = new SanctionDTO();
+		BeanUtils.copyProperties(sanction, sanctionDTO);
+		return sanctionDTO;
+	}
+	
+	public Sanction fromSanctionDTO(SanctionDTO sanctionDTO) {
+		Sanction sanction = new Sanction();
+		BeanUtils.copyProperties(sanctionDTO, sanction);
+		return sanction;
+	}
+	
+	public ConstatFullDTO fromConstatToConstatFullDTO(Constat constat) {
+		ConstatFullDTO constatDTO = new ConstatFullDTO();
+		BeanUtils.copyProperties(constat, constatDTO);
+		constatDTO.setMembre(fromMembre(constat.getMembre()));
+		constatDTO.setSeance(fromSeance(constat.getSeance()));
+		constatDTO.setSanction(fromSanction(constat.getSanction()));
+		return constatDTO;
+	}
+	
+	public Constat fromConstatFullDTOToConstat(ConstatFullDTO constatDTO) throws Exception {
+		Constat constat = new Constat();
+		BeanUtils.copyProperties(constatDTO, constat);
+		constat.setMembre(fromMembreSimplifieDTO(constatDTO.getMembre()));
+		constat.setSeance(fromSeanceSimpleDTO(constatDTO.getSeance()));
+		constat.setSanction(fromSanctionDTO(constatDTO.getSanction()));
+		return constat;
+	}
+	
+	
+	public ConstatDTO fromConstatToConstatDTO(Constat constat) {
+		ConstatDTO constatDTO = new ConstatDTO();
+		BeanUtils.copyProperties(constat, constatDTO);
+		constatDTO.setIdMembre(constat.getMembre().getIdMembre());
+		constatDTO.setIdSanction(constat.getSanction().getIdSanction());
+		constatDTO.setIdSeance(constat.getSeance().getIdSeance());
+		return constatDTO;
+	}
+	
+	public Constat fromConstatDTOToConstat(ConstatDTO constatDTO) throws Exception {
+		Constat constat = new Constat();
+		BeanUtils.copyProperties(constatDTO, constat);
+		Membre m = membreRepository.findById(constatDTO.getIdMembre()).orElseThrow(()-> new Exception(""));
+		constat.setMembre(m);
+		Sanction s = sanctionRepository.findById(constatDTO.getIdSanction()).orElseThrow(()-> new Exception(""));
+		constat.setSanction(s);
+		Seance se = seanceRepository.findById(constatDTO.getIdSeance()).orElseThrow(()-> new Exception(""));
+		constat.setSeance(se);
+		return constat;
+	}
+	
+	
+	public VersementSanctionDTO fromVersementSanctionToVersementSanctionDTO(VersementSanction versementSanction) {
+		VersementSanctionDTO versementSanctionDTO = new VersementSanctionDTO();
+		BeanUtils.copyProperties(versementSanction, versementSanctionDTO);
+		versementSanctionDTO.setIdMembre(versementSanction.getMembre().getIdMembre());
+		versementSanctionDTO.setIdConstat(versementSanction.getConstat().getIdConstat());
+		return versementSanctionDTO;
+	}
+	
+	public VersementSanction fromVersementSanctionDTOToVersementSanction(VersementSanctionDTO versementSanctionDTO) throws Exception {
+		VersementSanction versementSanction = new VersementSanction();
+		BeanUtils.copyProperties(versementSanctionDTO, versementSanction);
+		Membre m = membreRepository.findById(versementSanctionDTO.getIdMembre()).orElseThrow(()-> new Exception(""));
+		Constat c = constatRepository.findById(versementSanctionDTO.getIdConstat()).orElseThrow(()-> new Exception(""));
+		versementSanction.setMembre(m);
+		versementSanction.setConstat(c);
+		return versementSanction;
+	}
 	
 }

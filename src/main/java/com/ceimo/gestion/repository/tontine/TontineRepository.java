@@ -8,4 +8,5 @@ import com.ceimo.gestion.entity.tontine.Tontine;
 @Repository
 public interface TontineRepository extends JpaRepository<Tontine, Long> {
 
+
 }

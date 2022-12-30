@@ -1,5 +1,7 @@
 package com.ceimo.gestion.repository.membre;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,5 @@ import com.ceimo.gestion.entity.tontine.Tontine;
 public interface InscriptionRepository extends JpaRepository<Inscription, Long> {
 	
 	Inscription findByMembreIdMembreAndExerciceIdExercice(Long idMembre, Long idExercice);
+	List<Inscription> findByExerciceIdExercice(Long idExercice);
 }

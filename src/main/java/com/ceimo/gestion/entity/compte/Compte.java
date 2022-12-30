@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -49,7 +50,7 @@ public abstract class Compte {
 
 	@ManyToOne
 	private Membre membre;
-	@OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "compte", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Operation> listOperation ;
 	
 	

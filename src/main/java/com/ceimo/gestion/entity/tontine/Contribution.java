@@ -33,7 +33,9 @@ public class Contribution {
 	private Long idContribution;
 	
 	@Column(name = "MONTANT_CONTRIBUTION",nullable = false)
-	private float montantContribution;
+	private double montantContribution;
+	
+	private String mois;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_MEMBRE", nullable = false)

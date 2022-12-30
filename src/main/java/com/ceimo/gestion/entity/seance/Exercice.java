@@ -1,7 +1,9 @@
 package com.ceimo.gestion.entity.seance;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -43,9 +45,10 @@ public class Exercice {
 	@Column(name="DATE_FIN_EXERCICE", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dateFinExercice;
+	
 	private boolean statut;
 	@OneToMany(mappedBy = "exercice", fetch = FetchType.LAZY)
 	//@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private Set<Seance> seances = new HashSet<>();
+	private List<Seance> seances = new ArrayList<>();
 	
 }

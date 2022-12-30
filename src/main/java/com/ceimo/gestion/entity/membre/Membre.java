@@ -72,7 +72,7 @@ public class Membre {
 	
 	@OneToMany(mappedBy = "membre", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	//@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private List<Elire> mesRoles;
+	private List<Elire> mesRoles = new ArrayList<>();
 	
 	public void addPoste(Elire elire) {
 		mesRoles.add(elire);

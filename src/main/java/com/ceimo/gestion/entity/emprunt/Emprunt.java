@@ -58,7 +58,7 @@ public class Emprunt {
 			joinColumns = @JoinColumn(name = "ID_EMPRUNT"), // champ de la table de jointure
 			inverseJoinColumns = @JoinColumn(name = "ID_MEMBRE")// champ de la table de jointure
 	)
-	private Set<Membre> avalistes = new HashSet<>();
+	private List<Membre> avalistes = new ArrayList<>();
 	
 	
 	@Override

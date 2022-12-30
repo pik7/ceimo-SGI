@@ -12,9 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ExerciceDTO {
 
-	private Long idexercice;
-	private Date datedebutexercice;
-	private Date datefinexercice;
-	
+	private Long idExercice;
+	private Date dateDebutExercice;
+	private Date dateFinExercice;
+	private boolean statut;
 	
 }
